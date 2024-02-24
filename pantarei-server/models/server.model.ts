@@ -2,10 +2,10 @@ import express, { Application } from 'express';
 import cors from 'cors';
 
 export class Server {
-    private port: number;
+    private port?: number;
     private app: Application;
 
-    constructor(port: number) {
+    constructor(port?: number) {
         this.port = port;
         this.app = express();
         this.settings();
