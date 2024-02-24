@@ -6,3 +6,92 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model categories {
+  id               String             @id @default(dbgenerated("(uuid())")) @db.VarChar(100)
+  name             String?            @db.VarChar(50)
+  skill_categories skill_categories[]
+}
+
+model order_details {
+  id                                              String @id @default(dbgenerated("(uuid())")) @db.VarChar(100)
+  order_id                                        String @unique(map: "order_id") @db.VarChar(100)
+  skill_offered_id                                String @db.VarChar(100)
+  skill_requested_id                              String @db.VarChar(100)
+  orders                                          orders @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  skills_order_details_skill_offered_idToskills   skills @relation("order_details_skill_offered_idToskills", fields: [skill_offered_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  skills_order_details_skill_requested_idToskills skills @relation("order_details_skill_requested_idToskills", fields: [skill_requested_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([skill_offered_id], map: "order_details_skill_offered_id_fkey")
+  @@index([skill_requested_id], map: "order_details_skill_requested_id_fkey")
+}
+
+model orders {
+  id            String         @id @default(dbgenerated("(uuid())")) @db.VarChar(100)
+  status        String         @default(dbgenerated("(_utf8mb4\\'in progress\\')")) @db.VarChar(20)
+  created_at    DateTime?      @default(now()) @db.Timestamp(0)
+  updated_at    DateTime?      @default(now()) @db.Timestamp(0)
+  order_details order_details?
+  user_orders   user_orders[]
+}
+
+model roles {
+  id    String  @id @default(dbgenerated("(uuid())")) @db.VarChar(100)
+  name  String? @db.VarChar(20)
+  users users[]
+}
+
+model skill_categories {
+  skill_id    String     @db.VarChar(100)
+  category_id String     @db.VarChar(100)
+  categories  categories @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  skills      skills     @relation(fields: [skill_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([skill_id, category_id])
+  @@index([category_id], map: "skill_categories_category_id_fkey")
+}
+
+model skills {
+  id                                                     String             @id @default(dbgenerated("(uuid())")) @db.VarChar(100)
+  name                                                   String             @db.VarChar(100)
+  description                                            String             @db.Text
+  order_details_order_details_skill_offered_idToskills   order_details[]    @relation("order_details_skill_offered_idToskills")
+  order_details_order_details_skill_requested_idToskills order_details[]    @relation("order_details_skill_requested_idToskills")
+  skill_categories                                       skill_categories[]
+  user_skills                                            user_skills[]
+}
+
+model user_orders {
+  user_id  String  @db.VarChar(100)
+  order_id String  @db.VarChar(100)
+  role     String? @db.VarChar(20)
+  orders   orders  @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users    users   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([user_id, order_id])
+  @@index([order_id], map: "user_orders_order_id_fkey")
+}
+
+model user_skills {
+  user_id   String @db.VarChar(100)
+  skill_id  String @db.VarChar(100)
+  user_role String @db.VarChar(20)
+  skills    skills @relation(fields: [skill_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users     users  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "user_skills_users_id_fkey")
+
+  @@id([user_id, skill_id])
+  @@index([skill_id], map: "user_skills_skill_id_fkey")
+}
+
+model users {
+  id          String        @id @default(dbgenerated("(uuid())")) @db.VarChar(100)
+  name        String        @db.VarChar(30)
+  email       String        @unique(map: "email") @db.VarChar(50)
+  password    String        @db.VarChar(100)
+  role_id     String        @db.VarChar(100)
+  user_orders user_orders[]
+  user_skills user_skills[]
+  roles       roles         @relation(fields: [role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
+
+  @@index([role_id], map: "role_id")
+}
