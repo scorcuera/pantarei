@@ -1,5 +1,6 @@
 import express, { Application } from 'express';
 import cors from 'cors';
+import { skillRoutes } from '../routes/skill.routes';
 
 export class Server {
     private port?: number;
@@ -9,12 +10,17 @@ export class Server {
         this.port = port;
         this.app = express();
         this.settings();
+        this.routes();
     }
 
     settings() {
         this.app.set("port", this.port || process.env.PORT || 3000);
         this.app.use(express.json());
         this.app.use(cors());
+    }
+
+    routes() {
+        this.app.use("/skills", skillRoutes);
     }
 
     listen() {
