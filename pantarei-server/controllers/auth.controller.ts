@@ -1,25 +1,43 @@
 import { Request, Response } from "express";
 import { User } from "../models/user.model";
-import { hashPassword } from "../utils/password.utils";
+import { hashPassword, verifyPassword } from "../utils/password.utils";
+import { createToken } from "../utils/jwt.utils";
 
 export const AuthController = {
-    login: (req: Request, res: Response) => {
+    login: async (req: Request, res: Response) => {
         try {
-            // capturar los datos del usuario que vienen en el body
+
             let userDataFromClient = req.body;
-            console.log(userDataFromClient);
 
-            // validar que los datos del usuario sean correctos
+            // validar que los datos del usuario sean correctos [pendiente]
 
-            // comprobar que el usuario exista en la base de datos
+            let userInfo = await User.getUserByEmail(userDataFromClient.email);
 
-            // comprobar que la contraseña sea correcta
+            if (!userInfo) {
+                res.status(400).json({ message: "User does not exist" });
+            }
 
-            // generar un token de autenticación
+            let encryptedPassword = userInfo?.password as string;
+            let isPasswordValid = await verifyPassword(userDataFromClient.password, encryptedPassword);
 
-            // enviar el token al cliente
+            if (!isPasswordValid) {
+                res.status(400).json({ message: "Invalid password" });
+            }
 
+            let userId = userInfo?.id as string;
+            let token = createToken(userId);
 
+            const data = {
+                token: token,
+                user: {
+                    id: userInfo?.id,
+                    name: userInfo?.name,
+                    email: userInfo?.email,
+                    role_id: userInfo?.role_id
+                }
+            }
+
+            res.status(200).json(data);
 
         } catch (error) {
             res.status(500).json({ message: "An error occurred while logging in" });
