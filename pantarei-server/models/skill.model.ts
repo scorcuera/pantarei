@@ -8,5 +8,17 @@ export const Skill = {
         } catch (error) {
             console.error(error);
         }
+    },
+    getSkillById: async (id: string) => {
+        try {
+            const skill = await prisma.skills.findUnique({
+                where: {
+                    id: id
+                }
+            });
+            return skill;
+        } catch (error) {
+            console.error(error);
+        }
     }
 }
