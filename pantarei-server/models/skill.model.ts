@@ -6,7 +6,7 @@ export const Skill = {
             const skills = await prisma.skills.findMany();
             return skills;
         } catch (error) {
-            console.error(error);
+            throw new Error("An error occurred while fetching skills");
         }
     },
     getSkillById: async (id: string) => {
@@ -16,9 +16,12 @@ export const Skill = {
                     id: id
                 }
             });
+            if (!skill) {
+                throw new Error('Skill not found');
+            }
             return skill;
         } catch (error) {
-            console.error(error);
+            throw new Error("An error occurred while fetching skill");
         }
     }
 }
