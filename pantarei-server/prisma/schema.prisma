@@ -18,12 +18,12 @@ model order_details {
   order_id                                        String @unique(map: "order_id") @db.VarChar(100)
   skill_offered_id                                String @db.VarChar(100)
   skill_requested_id                              String @db.VarChar(100)
-  orders                                          orders @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  skills_order_details_skill_offered_idToskills   skills @relation("order_details_skill_offered_idToskills", fields: [skill_offered_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  skills_order_details_skill_requested_idToskills skills @relation("order_details_skill_requested_idToskills", fields: [skill_requested_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  orders                                          orders @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "order_details_ibfk_1")
+  skills_order_details_skill_offered_idToskills   skills @relation("order_details_skill_offered_idToskills", fields: [skill_offered_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "order_details_ibfk_2")
+  skills_order_details_skill_requested_idToskills skills @relation("order_details_skill_requested_idToskills", fields: [skill_requested_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "order_details_ibfk_3")
 
-  @@index([skill_offered_id], map: "order_details_skill_offered_id_fkey")
-  @@index([skill_requested_id], map: "order_details_skill_requested_id_fkey")
+  @@index([skill_offered_id], map: "skill_offered_id")
+  @@index([skill_requested_id], map: "skill_requested_id")
 }
 
 model orders {
@@ -36,7 +36,7 @@ model orders {
 }
 
 model roles {
-  id    String  @id @default(dbgenerated("(uuid())")) @db.VarChar(100)
+  id    Int     @id @default(autoincrement())
   name  String? @db.VarChar(20)
   users users[]
 }
@@ -44,11 +44,11 @@ model roles {
 model skill_categories {
   skill_id    String     @db.VarChar(100)
   category_id String     @db.VarChar(100)
-  categories  categories @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  skills      skills     @relation(fields: [skill_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  skills      skills     @relation(fields: [skill_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "skill_categories_ibfk_1")
+  categories  categories @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "skill_categories_ibfk_2")
 
   @@id([skill_id, category_id])
-  @@index([category_id], map: "skill_categories_category_id_fkey")
+  @@index([category_id], map: "category_id")
 }
 
 model skills {
@@ -65,22 +65,22 @@ model user_orders {
   user_id  String  @db.VarChar(100)
   order_id String  @db.VarChar(100)
   role     String? @db.VarChar(20)
-  orders   orders  @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  users    users   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users    users   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "user_orders_ibfk_1")
+  orders   orders  @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "user_orders_ibfk_2")
 
   @@id([user_id, order_id])
-  @@index([order_id], map: "user_orders_order_id_fkey")
+  @@index([order_id], map: "order_id")
 }
 
 model user_skills {
   user_id   String @db.VarChar(100)
   skill_id  String @db.VarChar(100)
   user_role String @db.VarChar(20)
-  skills    skills @relation(fields: [skill_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   users     users  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "user_skills_users_id_fkey")
+  skills    skills @relation(fields: [skill_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "user_skills_ibfk_2")
 
   @@id([user_id, skill_id])
-  @@index([skill_id], map: "user_skills_skill_id_fkey")
+  @@index([skill_id], map: "skill_id")
 }
 
 model users {
@@ -88,10 +88,10 @@ model users {
   name        String        @db.VarChar(30)
   email       String        @unique(map: "email") @db.VarChar(50)
   password    String        @db.VarChar(100)
-  role_id     String        @db.VarChar(100)
+  role_id     Int
   user_orders user_orders[]
   user_skills user_skills[]
-  roles       roles         @relation(fields: [role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
+  roles       roles         @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "users_ibfk_1")
 
   @@index([role_id], map: "role_id")
 }
