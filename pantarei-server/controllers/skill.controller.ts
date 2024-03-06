@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Skill } from "../models/skill.model";
+import { prisma } from "../connection/db_client";
 
 export const SkillController = {
     getAllSkills: async (req: Request, res: Response) => {
@@ -32,3 +33,13 @@ export const SkillController = {
         }
     }
 }
+
+afterAll(async () => {
+    const deleteSkills = prisma.skills.deleteMany();
+
+    await prisma.$transaction([
+        deleteSkills
+    ])
+
+    await prisma.$disconnect();
+});
