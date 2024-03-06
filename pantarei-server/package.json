@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "pretest": "dotenv -e .env.test -- npx prisma migrate dev --name init",
+    "pretest": "NODE_ENV=test dotenv -e .env.test -- npx prisma migrate dev --name init",
     "test": "jest --detectOpenHandles --verbose",
     "dev": "ts-node-dev --respawn --transpile-only ./main.ts"
   },

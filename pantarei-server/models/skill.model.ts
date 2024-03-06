@@ -15,13 +15,23 @@ export const Skill = {
                 where: {
                     id: id
                 }
-            });
-            if (!skill) {
-                throw new Error('Skill not found');
-            }
+            })
             return skill;
         } catch (error) {
             throw new Error("An error occurred while fetching skill");
+        }
+    },
+    createSkill: async (data: any) => {
+        try {
+            const skill = await prisma.skills.create({
+                data: {
+                    name: data.name,
+                    description: data.description
+                }
+            });
+            return skill;
+        } catch (error) {
+            throw new Error("An error occurred while creating skill");
         }
     }
 }

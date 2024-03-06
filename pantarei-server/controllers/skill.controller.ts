@@ -14,12 +14,21 @@ export const SkillController = {
         try {
             const id = req.params.id;
             const skill = await Skill.getSkillById(id);
-            if (!skill) {
-                res.status(404).json({ message: "Skill not found" });
+            if (skill === undefined || skill === null){
+                return res.status(404).json({ message: "Skill not found" });
             }
             res.json(skill);
         } catch (error) {
             res.status(500).json({ message: "An error occurred while fetching skill" });
+        }
+    },
+    createSkill : async(req: Request, res: Response) => {
+        try {
+            const newSkill = req.body;
+            const skill = await Skill.createSkill(newSkill);
+            res.status(201).json({message: "Skill created successfully", skill: skill});
+        } catch (error) {
+            res.status(500).json({ message: "An error occurred while creating skill" });
         }
     }
 }
