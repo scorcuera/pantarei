@@ -1,7 +1,6 @@
 import request from "supertest";
 import { Server } from "../models/server.model";
-
-console.log(process.env.DATABASE_URL);
+import { prisma } from "../connection/db_client";
 
 describe("GET skills", () => {
     test("should return status code 200 when skills are called", async () => {
@@ -33,4 +32,14 @@ describe("POST skill", () => {
         const response = await request(server.app).get(`/skills/${newSkillId}`);
         expect(response.body.name).toBe(newSkill.name);
     });
-})
+});
+
+afterAll(async () => {
+    const deleteSkills = prisma.skills.deleteMany();
+
+    await prisma.$transaction([
+        deleteSkills
+    ])
+
+    await prisma.$disconnect();
+});
