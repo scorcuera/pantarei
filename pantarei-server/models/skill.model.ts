@@ -1,4 +1,4 @@
-import prisma from "../connection/db_client"
+import { prisma } from "../connection/db_client"
 
 export const Skill = {
     getAllSkills: async () => {

@@ -1,4 +1,4 @@
-import prisma from "../connection/db_client";
+import { prisma } from "../connection/db_client";
 import { UserRegisterData } from "../interfaces/user.interface";
 
 export const User = {

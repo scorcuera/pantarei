@@ -5,7 +5,7 @@ import { authRoutes } from '../routes/auth.routes';
 
 export class Server {
     private port?: number;
-    private app: Application;
+    public app: Application;
 
     constructor(port?: number) {
         this.port = port;
