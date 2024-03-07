@@ -31,7 +31,7 @@ export const SkillController = {
             res.status(201).json({message: "Skill created successfully", skill: skill});
         } catch (error) {
             if (error instanceof ZodError) {
-                return res.status(400).json({ message: error.errors });
+                return res.status(400).json({ message: error.issues[0].message });
             }
             res.status(500).json({ message: "An error occurred while creating skill" });
         }

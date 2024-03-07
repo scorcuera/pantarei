@@ -2,14 +2,14 @@ import { Request, Response } from "express";
 import { User } from "../models/user.model";
 import { hashPassword, verifyPassword } from "../utils/password.utils";
 import { createToken } from "../utils/jwt.utils";
+import { UserLoginSchema } from "../schemas/user.schema";
+import { ZodError } from "zod";
 
 export const AuthController = {
     login: async (req: Request, res: Response) => {
         try {
 
-            let userDataFromClient = req.body;
-
-            // validar que los datos del usuario sean correctos [pendiente]
+            let userDataFromClient = UserLoginSchema.parse(req.body);
 
             let userInfo = await User.getUserByEmail(userDataFromClient.email);
 
@@ -40,6 +40,9 @@ export const AuthController = {
             res.status(200).json(data);
 
         } catch (error) {
+            if (error instanceof ZodError) {
+                return res.status(400).json({ message: error.issues[0].message });
+            }
             res.status(500).json({ message: "An error occurred while logging in" });
         }
     },
