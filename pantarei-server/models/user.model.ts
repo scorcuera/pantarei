@@ -2,6 +2,14 @@ import { prisma } from "../connection/db_client";
 import { UserRegisterData } from "../interfaces/user.interface";
 
 export const User = {
+    getAllUsers: async () => {
+        try {
+            const users = await prisma.users.findMany();
+            return users;
+        } catch (error) {
+            throw new Error("An error occurred while fetching users");
+        }
+    },
     getUserByEmail: async (email: string) => {
         try {
             const user = await prisma.users.findUnique({
