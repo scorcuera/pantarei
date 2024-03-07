@@ -9,11 +9,11 @@ export const createToken = (id: string) => {
     return JWT;
 }
 
-export const verifyToken = (token: string) => {
+export const verifyToken = async (token: string) => {
     try {
         const decodedJWT = verify(token, JWT_SECRET);
         return decodedJWT;
     } catch (error) {
-        throw new Error('Invalid token');
+        return false;
     }
 };
