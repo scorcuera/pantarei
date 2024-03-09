@@ -40,6 +40,11 @@ describe("POST skill", () => {
         name: "test2",
         description: "test2"
     }
+    let newSkill_malFormed = {
+        name: "",
+        description: "test2"
+    }
+
     test("should return status code 201 when a skill is created", async () => {
         const server = new Server();
         const response = await request(server.app).post("/skills").send(newSkill);
@@ -50,6 +55,12 @@ describe("POST skill", () => {
         const server = new Server();
         const response = await request(server.app).get(`/skills/${newSkillId}`);
         expect(response.body.name).toBe(newSkill.name);
+    });
+    test("should return status code 400 if skill name is missing", async () => {
+        const server = new Server();
+        const response = await request(server.app).post("/skills").send(newSkill_malFormed);
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("Name cannot be empty");
     });
 });
 
