@@ -39,9 +39,13 @@ export const SkillController = {
     updateSkill: async(req: Request, res: Response) => {
         try {
             const id = req.params.id;
-            const updatedSkill = req.body;
-            const skill = await Skill.updateSkill(id, updatedSkill);
-            res.status(200).json({message: "Skill updated successfully", skill: skill});
+            const skill = await Skill.getSkillById(id);
+            if (skill === undefined || skill === null){
+                return res.status(404).json({ message: "Skill not found" });
+            }
+            const skillData = req.body;
+            const updatedSkill = await Skill.updateSkill(id, skillData);
+            res.status(200).json({message: "Skill updated successfully", skill: updatedSkill});
         } catch (error) {
             res.status(500).json({ message: "An error occurred while updating skill" });
         }        

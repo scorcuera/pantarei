@@ -73,6 +73,12 @@ describe("PUT skill", () => {
         expect(response.status).toBe(200);
         expect(response.body.message).toBe("Skill updated successfully");
     });
+
+    test("should return status code 404 if requested skill does not exist", async() => {
+        const server = new Server();
+        const response = await request(server.app).put("/skills/pepito").send({name: updatedTitle});
+        expect(response.status).toBe(404);
+    })
 });
 
 afterAll(async () => {
