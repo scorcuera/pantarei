@@ -33,5 +33,20 @@ export const Skill = {
         } catch (error) {
             throw new Error("An error occurred while creating skill");
         }
+    },
+    updateSkill: async (id: string, data: any) => {
+        try {
+            const skill = await prisma.skills.update({
+                where: {
+                    id: id
+                },
+                data: {
+                    name: data.name
+                }
+            })
+            return skill;
+        } catch (error) {
+            throw new Error("An error occurred while updating skill");             
+        }
     }
 }

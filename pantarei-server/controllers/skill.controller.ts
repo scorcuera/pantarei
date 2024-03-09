@@ -35,5 +35,15 @@ export const SkillController = {
             }
             res.status(500).json({ message: "An error occurred while creating skill" });
         }
+    },
+    updateSkill: async(req: Request, res: Response) => {
+        try {
+            const id = req.params.id;
+            const updatedSkill = req.body;
+            const skill = await Skill.updateSkill(id, updatedSkill);
+            res.status(200).json({message: "Skill updated successfully", skill: skill});
+        } catch (error) {
+            res.status(500).json({ message: "An error occurred while updating skill" });
+        }        
     }
 }
