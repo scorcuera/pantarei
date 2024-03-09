@@ -48,5 +48,16 @@ export const Skill = {
         } catch (error) {
             throw new Error("An error occurred while updating skill");             
         }
+    },
+    deleteSkill: async (id: string) => {
+        try {
+            await prisma.skills.delete({
+                where: {
+                    id: id
+                }
+            });
+        } catch (error) {
+            throw new Error("An error occurred while deleting skill");
+        }
     }
 }
