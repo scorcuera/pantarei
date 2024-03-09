@@ -64,6 +64,17 @@ describe("POST skill", () => {
     });
 });
 
+describe("PUT skill", () => {
+    let updatedTitle = "updated_title";
+
+    test("should return status code 200 if skill is updated", async () => {
+        const server = new Server();
+        const response = await request(server.app).put(`/skills/${newSkillId}`).send({name: updatedTitle});
+        expect(response.status).toBe(200);
+        expect(response.body.message).toBe("Skill updated successfully");
+    });
+});
+
 afterAll(async () => {
     const deleteSkills = prisma.skills.deleteMany();
 
