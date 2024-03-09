@@ -81,6 +81,21 @@ describe("PUT skill", () => {
     })
 });
 
+describe("DELETE skill", () => {
+    test("should return status code 200 if skill is deleted", async () => {
+        const server = new Server;
+        const response = await request(server.app).delete(`/skills/${newSkillId}`);
+        expect(response.status).toBe(200);
+        expect(response.body.message).toBe("Skill deleted successfully");
+    })
+
+    test("should return status code 404 if requested skill does not exist", async () => {
+        const server = new Server();
+        const response = await request(server.app).delete(`/skills/${newSkillId}`);
+        expect(response.status).toBe(404);
+    });
+});
+
 afterAll(async () => {
     const deleteSkills = prisma.skills.deleteMany();
 
