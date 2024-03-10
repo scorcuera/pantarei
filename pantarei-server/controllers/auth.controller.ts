@@ -55,7 +55,7 @@ export const AuthController = {
             let isRegistered = await User.getUserByEmail(userDataFromClient.email);
 
             if (isRegistered) {
-                res.status(400).json({ message: "User already exists" });
+                return res.status(400).json({ message: "User already exists" });
             }
 
             let userPassword = userDataFromClient.password;

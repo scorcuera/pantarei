@@ -28,7 +28,14 @@ describe("Register user", () => {
         const response = await request(server.app).post("/auth/register").send(newUser);
         expect(response.status).toBe(201);
         expect(response.body.message).toBe("User registered successfully");
-    })
+    });
+
+    test("should return status code 400 if user already exists", async () => {
+        const server = new Server();
+        const response = await request(server.app).post("/auth/register").send(newUser);
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("User already exists");
+    });
 })
 
 afterAll(async () => {
