@@ -47,8 +47,6 @@ export const AuthController = {
         try {
             let userDataFromClient = UserRegisterSchema.parse(req.body);
 
-            // validar que los datos del usuario sean correctos [pendiente]
-
             let isRegistered = await User.getUserByEmail(userDataFromClient.email);
 
             if (isRegistered) {
@@ -60,7 +58,7 @@ export const AuthController = {
 
             let userData = {...userDataFromClient, password: encryptedPassword};
 
-            await User.createUser(userData)
+            let resp = await User.createUser(userData)
 
             res.status(201).json({ message: "User registered successfully" });
 
