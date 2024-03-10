@@ -36,7 +36,7 @@ model orders {
 }
 
 model roles {
-  id    Int     @id @default(autoincrement())
+  id    Int     @id @default(1)
   name  String? @db.VarChar(20)
   users users[]
 }
@@ -76,7 +76,7 @@ model user_skills {
   user_id   String @db.VarChar(100)
   skill_id  String @db.VarChar(100)
   user_role String @db.VarChar(20)
-  users     users  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "user_skills_users_id_fkey")
+  users     users  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "user_skills_ibfk_1")
   skills    skills @relation(fields: [skill_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "user_skills_ibfk_2")
 
   @@id([user_id, skill_id])

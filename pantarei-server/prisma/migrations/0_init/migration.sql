@@ -31,7 +31,7 @@ CREATE TABLE `orders` (
 
 -- CreateTable
 CREATE TABLE `roles` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id` INTEGER NOT NULL DEFAULT 1,
     `name` VARCHAR(20) NULL,
 
     PRIMARY KEY (`id`)
@@ -110,7 +110,7 @@ ALTER TABLE `user_orders` ADD CONSTRAINT `user_orders_ibfk_1` FOREIGN KEY (`user
 ALTER TABLE `user_orders` ADD CONSTRAINT `user_orders_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE `user_skills` ADD CONSTRAINT `user_skills_users_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+ALTER TABLE `user_skills` ADD CONSTRAINT `user_skills_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE `user_skills` ADD CONSTRAINT `user_skills_ibfk_2` FOREIGN KEY (`skill_id`) REFERENCES `skills`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
