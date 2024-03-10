@@ -7,13 +7,13 @@ beforeAll(async () => {
         data: {
             name: "user",
         }
-    })
+    });
     await prisma.roles.create({
         data: {
             name: "admin",
             id: 2
         }
-    })
+    });
 })
 
 describe("Register user", () => {
@@ -36,6 +36,20 @@ describe("Register user", () => {
         expect(response.status).toBe(400);
         expect(response.body.message).toBe("User already exists");
     });
+});
+
+describe("Login user", () => {
+    let user = {
+        email: "user1@f5.org",
+        password: "pass1"
+    }
+
+    test("should return status code 200 when user logs in", async () => {
+        const server = new Server();
+        const response = await request(server.app).post("/auth/login").send(user);
+        expect(response.status).toBe(200);
+        expect(response.body.message).toBe("User logged in");
+    })
 })
 
 afterAll(async () => {

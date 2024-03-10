@@ -14,14 +14,14 @@ export const AuthController = {
             let userInfo = await User.getUserByEmail(userDataFromClient.email);
 
             if (!userInfo) {
-                res.status(400).json({ message: "User does not exist" });
+                return res.status(400).json({ message: "User does not exist" });
             }
 
             let encryptedPassword = userInfo?.password as string;
             let isPasswordValid = await verifyPassword(userDataFromClient.password, encryptedPassword);
 
             if (!isPasswordValid) {
-                res.status(400).json({ message: "Invalid password" });
+                return res.status(400).json({ message: "Invalid password" });
             }
 
             let userId = userInfo?.id as string;
@@ -37,7 +37,7 @@ export const AuthController = {
                 }
             }
 
-            res.status(200).json(data);
+            res.status(200).json({ message: "User logged in", data: data});
 
         } catch (error) {
             if (error instanceof ZodError) {
