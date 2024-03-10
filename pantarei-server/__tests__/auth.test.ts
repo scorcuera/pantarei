@@ -49,7 +49,21 @@ describe("Login user", () => {
         const response = await request(server.app).post("/auth/login").send(user);
         expect(response.status).toBe(200);
         expect(response.body.message).toBe("User logged in");
-    })
+    });
+
+    test("should return status code 400 if user does not exist", async () => {
+        const server = new Server();
+        const response = await request(server.app).post("/auth/login").send({...user, email: "pepito@f5.org"})
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("User does not exist");
+    });
+    
+    test("should return status code 400 if password is invalid", async () => {
+        const server = new Server();
+        const response = await request(server.app).post("/auth/login").send({...user, password: "pepito"})
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("Invalid password");
+    });
 })
 
 afterAll(async () => {
