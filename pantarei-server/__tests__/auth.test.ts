@@ -6,6 +6,7 @@ beforeAll(async () => {
     await prisma.roles.create({
         data: {
             name: "user",
+            id: 1
         }
     });
     await prisma.roles.create({

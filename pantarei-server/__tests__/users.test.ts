@@ -3,17 +3,6 @@ import { Server } from "../models/server.model";
 import { prisma } from "../connection/db_client";
 
 beforeAll(async () => {
-    await prisma.roles.create({
-        data: {
-            name: "user",
-        }
-    });
-    await prisma.roles.create({
-        data: {
-            name: "admin",
-            id: 2
-        }
-    });
     let newAdmin = {
         email: "admin@f5.org",
         name: "admin",
@@ -24,6 +13,7 @@ beforeAll(async () => {
         email: "user@f5.org",
         name: "user",
         password: "pass1",
+        role_id: 1
     }
     const server = new Server();
     await request(server.app).post("/auth/register").send(newAdmin);

@@ -36,7 +36,7 @@ model orders {
 }
 
 model roles {
-  id    Int     @id @default(1)
+  id    Int     @id
   name  String? @db.VarChar(20)
   users users[]
 }

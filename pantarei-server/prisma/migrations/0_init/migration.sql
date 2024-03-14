@@ -31,7 +31,7 @@ CREATE TABLE `orders` (
 
 -- CreateTable
 CREATE TABLE `roles` (
-    `id` INTEGER NOT NULL DEFAULT 1,
+    `id` INTEGER NOT NULL,
     `name` VARCHAR(20) NULL,
 
     PRIMARY KEY (`id`)
