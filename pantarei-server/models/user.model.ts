@@ -41,7 +41,7 @@ export const User = {
                     name: data.name,
                     email: data.email,
                     password: data.password,
-                    role_id: data.role_id || 1
+                    role_id: data.role_id ?? 1
                 }
             });
             return user;

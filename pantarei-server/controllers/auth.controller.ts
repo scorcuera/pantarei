@@ -58,7 +58,7 @@ export const AuthController = {
 
             let userData = {...userDataFromClient, password: encryptedPassword};
 
-            let resp = await User.createUser(userData)
+            await User.createUser(userData);
 
             res.status(201).json({ message: "User registered successfully" });
 
