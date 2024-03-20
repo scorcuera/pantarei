@@ -1,14 +1,19 @@
 import { useForm } from "react-hook-form";
-import { useState, useContext } from "react";
-import AuthContext from "./context/AuthProvider";
+// import { useContext } from "react";
+// import AuthContext from "./context/AuthProvider";
 import authService from "../services/auth.service";
-import { FormErrorMessage, FormLabel, FormControl, Input, Button, Box } from "@chakra-ui/react"
+import { FormErrorMessage, FormLabel, FormControl, Input, Button, Box } from "@chakra-ui/react";
+
+type LogInData = {
+  email: string;
+  password: string;
+};
 
 function App() {
-  const { setAuth } = useContext(AuthContext);
+  // const { setAuth } = useContext(AuthContext);
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: LogInData) => {
     try {
       console.log(data)
       await authService.logInUser(data);
@@ -20,7 +25,7 @@ function App() {
   return (
     <Box p={40}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormControl isInvalid={errors.email}>
+        <FormControl isInvalid={!!errors.email}>
           <FormLabel htmlFor="email">Email</FormLabel>
           <Input
             id="email"
@@ -37,7 +42,7 @@ function App() {
             {errors.email && errors.email.message}
           </FormErrorMessage>
         </FormControl>
-        <FormControl isInvalid={errors.password}>
+        <FormControl isInvalid={!!errors.password}>
           <FormLabel htmlFor="password">Password</FormLabel>
           <Input
             id="password"
