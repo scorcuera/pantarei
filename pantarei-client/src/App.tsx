@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useState, useContext } from "react";
 import AuthContext from "./context/AuthProvider";
+import authService from "../services/auth.service";
 import { FormErrorMessage, FormLabel, FormControl, Input, Button, Box } from "@chakra-ui/react"
 
 function App() {
@@ -8,7 +9,12 @@ function App() {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
 
   const onSubmit = async (data: any) => {
-    console.log(data)
+    try {
+      console.log(data)
+      await authService.logInUser(data);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
