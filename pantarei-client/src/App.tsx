@@ -1,7 +1,10 @@
-import { useForm } from "react-hook-form"
+import { useForm } from "react-hook-form";
+import { useState, useContext } from "react";
+import AuthContext from "./context/AuthProvider";
 import { FormErrorMessage, FormLabel, FormControl, Input, Button, Box } from "@chakra-ui/react"
 
 function App() {
+  const { setAuth } = useContext(AuthContext);
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
 
   const onSubmit = async (data: any) => {
