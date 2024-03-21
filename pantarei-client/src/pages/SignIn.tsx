@@ -1,8 +1,9 @@
 import { useForm } from "react-hook-form";
-// import { useContext } from "react";
-// import AuthContext from "./context/AuthProvider";
+import { useContext } from "react";
+import AuthContext from "../context/AuthProvider";
 import authService from "../../services/auth.service";
 import { FormErrorMessage, FormLabel, FormControl, Input, Button, Box } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 type LogInData = {
     email: string;
@@ -10,17 +11,23 @@ type LogInData = {
 };
 
 const SignIn = () => {
-    // const { setAuth } = useContext(AuthContext);
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
+    const { setAuth } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
 
-  const onSubmit = async (data: LogInData) => {
-    try {
-      console.log(data)
-      await authService.logInUser(data);
-    } catch (error) {
-      console.log(error);
+    const onSubmit = async (data: LogInData) => {
+        try {
+            const userData = await authService.logInUser(data);
+            if (!userData.data.token) {
+                console.error("An error ocurred while logging in");
+                return navigate("/signin");
+            }
+            setAuth(userData);
+            navigate("/dashboard");
+        } catch (error) {
+            console.log(error);
+        }
     }
-  }
     return (
         <Box p={40}>
             <form onSubmit={handleSubmit(onSubmit)}>
